@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<div class="page-heading"><p class="eyebrow">THE LODGE</p><h1>Choose a bedroom</h1><p class="subtitle">Reserve one bedroom at a time. To book multiple rooms, make a separate reservation for each.</p></div>
+<section class="panel">{% for room in rooms %}<div class="reservation-row"><h2>{{ room.name }}</h2><p>{{ room.description }} · {{ room.capacity }} sleeping place(s)</p><a class="button" href="{% url 'booking_new' %}?room={{ room.pk }}&amp;arrival={{ arrival|date:'Y-m-d' }}&amp;departure={{ departure|urlencode }}">Reserve {{ room.name }}</a></div>{% empty %}<p>No bedrooms are currently available to reserve.</p>{% endfor %}</section>
+{% endblock %}

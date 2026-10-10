@@ -1,0 +1,12 @@
+asgiref==3.12.1
+cffi==2.1.1
+cryptography==50.0.2
+Django==5.2.18
+gunicorn==23.0.0
+packaging==26.3
+pillow==12.3.0
+psycopg==3.3.6
+psycopg-binary==3.3.6
+pycparser==3.11
+sqlparse==0.6.0
+whitenoise==6.12.0

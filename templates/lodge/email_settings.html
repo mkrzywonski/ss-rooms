@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">ADMINISTRATION</p><h1>Email configuration</h1><p class="subtitle">Configure the Lodge’s outgoing email server. Changes apply to queued notifications without restarting the app.</p></div>
+<section class="panel form-panel">
+<p class="helptext">Use STARTTLS (usually port 587) or TLS / SSL (usually port 465), and your provider’s app password if required. TLS certificates are verified. The saved password is encrypted and is never displayed.</p>
+{% if form.has_password %}<p class="badge">SMTP password saved</p>{% endif %}
+<form method="post" autocomplete="off">{% csrf_token %}{{ form.as_p }}
+<button name="action" value="save">Save settings</button>
+<button name="action" value="test" class="secondary">Save and send test email</button>
+</form>
+<p class="helptext">Test messages go only to your signed-in email address. The worker sends them asynchronously; refresh this page for status. Saved SMTP settings are used for all pending notifications.</p>
+</section>
+<section class="panel"><h2>Your recent email tests</h2>
+{% for test in tests %}<p>{{ test.created_at }} · {% if test.sent_at %}<span class="badge">Accepted by SMTP server</span>{% elif test.failed %}<span class="badge out">Failed after retries</span>{% elif test.attempts %}<span class="badge low">Retry pending</span>{% else %}<span class="badge unknown">Queued</span>{% endif %}{% if test.last_error %}<small>{{ test.last_error }} — check server, credentials, and provider requirements.</small>{% endif %}</p>{% empty %}<p>No test messages yet.</p>{% endfor %}
+<p><a href="{% url 'admin:lodge_notification_changelist' %}">View email delivery queue and retry failures →</a></p>
+</section>
+{% endblock %}

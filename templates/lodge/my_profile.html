@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">YOUR ACCOUNT</p><h1>My profile</h1><p>{{ user.name }} · {{ user.email }}{% if user.observatory_number %} · Observatory {{ user.observatory_number }}{% endif %}</p></div>
+<section class="panel form-panel"><h2>Contact information, observatory, and privacy</h2><p>Choose separately whether to share your address and phone number in the members-only directory. Both are private by default. Administrators can still access them for administration.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button name="action" value="profile">Save profile</button></form>
+<p class="helptext">Uncheck a sharing option and save to hide that detail from other members. This does not delete the saved information, and cannot recall copies someone previously viewed. Only you can change these sharing preferences.</p>
+<a href="{% url 'member_directory' %}">View member directory →</a></section>
+<section class="panel form-panel"><h2>Change password</h2><p>Enter your current password and choose a new one. Your current session stays signed in; other sessions will need to sign in again.</p>
+<form method="post">{% csrf_token %}{{ password_form.as_p }}<button name="action" value="password">Change password</button></form></section>
+<section class="panel form-panel"><h2>Change email address</h2><p>Your current sign-in address is {{ user.email }}. Verify the new address before it replaces the current one.</p>
+{% if user.pending_email %}<p>Awaiting verification: <strong>{{ user.pending_email }}</strong>. Links expire after 48 hours.</p><form method="post">{% csrf_token %}<input type="hidden" name="revision" value="{{ user.admin_revision }}"><button class="secondary" name="action" value="cancel_email">Cancel pending email change</button></form>{% endif %}
+<form method="post">{% csrf_token %}{{ email_form.as_p }}<button name="action" value="email">Send verification email</button></form></section>
+{% endblock %}

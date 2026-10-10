@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">USER ADMINISTRATION</p><h1>Delete {{ member.name }}?</h1><p>{{ member.email }}</p><a href="{% url 'members' %}">← Back to members</a></div>
+<section class="panel form-panel"><p>Deleting this account revokes login and administrator access and removes it from the current user list. Its name, email, reservations, property reports, comments, and audit history are retained so shared records remain understandable.</p><p>Any planned restocking commitments will be canceled, and problems assigned to this member will become unassigned. The email address remains reserved by the retained account.</p>
+{% if protected %}<p class="message error">Your own account and superuser accounts cannot be deleted here.</p>{% endif %}
+{% if upcoming %}<h2>Upcoming stays need attention</h2><p>Rearrange or cancel these reservations before deleting the account.</p>{% for stay in upcoming %}<p><a href="{% url 'booking_detail' stay.booking_id %}">{{ stay.resource }} · {{ stay.arrival }} → {{ stay.departure }}</a></p>{% endfor %}{% endif %}
+{% if plans %}<h2>Restocking plans that will be canceled</h2>{% for plan in plans %}<p>{{ plan.item }} · {{ plan.expected_date }} · {{ plan.description }}</p>{% endfor %}{% endif %}
+<form method="post">{% csrf_token %}{{ form.as_p }}<button class="danger" {% if protected or upcoming %}disabled{% endif %}>Delete user</button></form>
+</section>
+{% endblock %}

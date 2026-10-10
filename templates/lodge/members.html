@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading split">
+  <div><p class="eyebrow">ADMINISTRATION</p><h1>Members and approvals</h1><p>Add members, manage their accounts, and review registration requests.</p></div>
+  <a class="button" href="{% url 'member_new' %}">Add user ↗</a>
+</div>
+<p><a href="{% url 'members' %}">Current accounts</a> · <a href="?deleted=1">Deleted accounts</a></p>
+<section class="panel">
+{% for member in members %}
+<article class="member-row">
+  <div class="section-heading">
+    <h2>{{ member.name }} <span class="badge">{% if member.deleted_at %}Deleted{% else %}{{ member.get_status_display }}{% endif %}</span>{% if member.is_staff %} <span class="badge">Administrator</span>{% endif %}{% if not member.is_active and not member.deleted_at %} <span class="badge out">Disabled</span>{% endif %}</h2>
+    {% if not member.deleted_at %}<div><a href="{% url 'member_edit' member.pk %}">Edit user</a>{% if member.pk != user.pk and not member.is_superuser %} · <a href="{% url 'member_delete' member.pk %}">Delete user</a>{% endif %}</div>{% endif %}
+  </div>
+  <p><a href="mailto:{{ member.email }}">{{ member.email }}</a><br>{{ member.connection }}</p>
+  {% if member.deleted_at %}<p class="helptext">Deleted {{ member.deleted_at }}. Login is disabled; shared history remains available.</p>{% else %}
+  {% if member.pk != user.pk and not member.is_staff %}
+  {% if member.status == 'pending' or member.status == 'suspended' or member.status == 'approved' %}
+  <form method="post" class="member-actions">{% csrf_token %}
+    <input type="hidden" name="user" value="{{ member.pk }}">
+    <label>Reason (optional)<input name="reason" maxlength="300"></label>
+    {% if member.status == 'pending' or member.status == 'suspended' %}
+    <button name="decision" value="approved">Approve</button><button class="secondary danger" name="decision" value="rejected">Reject</button>
+    {% else %}<button class="secondary danger" name="decision" value="suspended">Suspend</button>{% endif %}
+  </form>
+  {% endif %}{% endif %}
+  {% endif %}
+</article>
+{% empty %}<p class="empty">{% if show_deleted %}No deleted accounts.{% else %}No members to show.{% endif %}</p>{% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading split"><div><p class="eyebrow">OUR COMMUNITY</p><h1>Member directory</h1><p class="subtitle">Contact details appear only when the member chooses to share them. This directory is visible only to approved members.</p></div><a class="button" href="{% url 'my_profile' %}">My sharing preferences</a></div>
+<section class="panel">
+{% for member in entries %}<article class="member-row" id="member-{{ member.pk }}"><h2>{{ member.name }}{% if member.observatory_number %} <span class="badge">Observatory {{ member.observatory_number }}</span>{% endif %}</h2><p><a href="mailto:{{ member.email }}">{{ member.email }}</a></p>
+{% if member.visible_address %}<p><strong>Address</strong><br>{{ member.visible_address|linebreaksbr }}</p>{% endif %}
+{% if member.visible_phone_number %}<p><strong>Phone</strong><br>{{ member.visible_phone_number }}</p>{% endif %}
+{% if not member.visible_address and not member.visible_phone_number %}<p class="helptext">No additional contact details shared.</p>{% endif %}
+</article>{% empty %}<p>No members to display.</p>{% endfor %}
+</section>
+{% endblock %}

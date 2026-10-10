@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">ADMINISTRATION</p><h1>Manage reservations</h1><p>Review the latest 200 bookings. Changes to another member’s stay require a reason and send a notification.</p></div>
+<section class="panel"><div class="table-scroll"><table><thead><tr><th>Booking</th><th>Member</th><th>Bedrooms and dates</th><th>Actions</th></tr></thead><tbody>
+{% for booking in bookings %}<tr><td>#{{ booking.pk }}</td><td>{{ booking.owner }}</td><td>{% for row in booking.reservations.all %}{% if not row.canceled_at %}<small>{{ row.resource }} · {{ row.arrival }} → {{ row.departure }}</small>{% endif %}{% endfor %}{% if not booking.active %}Canceled{% endif %}</td><td><a href="{% url 'admin_booking_detail' booking.pk %}">Manage booking</a></td></tr>{% empty %}<tr><td colspan="4">No reservations yet.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

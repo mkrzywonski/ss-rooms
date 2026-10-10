@@ -1,0 +1,75 @@
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.urls import path
+
+from lodge import views
+from lodge.forms import QueuedPasswordResetForm
+
+urlpatterns = [
+    path("health/", views.health, name="health"),
+    path("admin/", admin.site.urls),
+    path("accounts/login/", auth_views.LoginView.as_view(), name="login"),
+    path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(
+        "accounts/password_reset/",
+        auth_views.PasswordResetView.as_view(form_class=QueuedPasswordResetForm),
+        name="password_reset",
+    ),
+    path(
+        "accounts/password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    path(
+        "accounts/reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "accounts/reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
+    path("register/", views.register, name="register"),
+    path("verify/<str:token>/", views.verify, name="verify"),
+    path("account/", views.account_status, name="account_status"),
+    path("account/resend/", views.resend, name="resend"),
+    path("account/profile/", views.my_profile, name="my_profile"),
+    path(
+        "account/email/confirm/<str:token>/",
+        views.confirm_email_change,
+        name="confirm_email_change",
+    ),
+    path("members/", views.member_directory, name="member_directory"),
+    path("", views.dashboard, name="dashboard"),
+    path("calendar/", views.calendar, name="calendar"),
+    path("bookings/new/", views.booking_edit, name="booking_new"),
+    path("bookings/<int:pk>/", views.booking_detail, name="booking_detail"),
+    path("bookings/<int:pk>/edit/", views.booking_edit, name="booking_edit"),
+    path("bookings/<int:pk>/cancel/", views.booking_cancel, name="booking_cancel"),
+    path("reservations/<int:pk>/edit/", views.reservation_edit, name="reservation_edit"),
+    path("problems/", views.problems, name="problems"),
+    path("problems/new/", views.problem_new, name="problem_new"),
+    path("problems/<int:pk>/", views.problem_detail, name="problem_detail"),
+    path("problems/<int:pk>/subscription/", views.subscription, name="subscription"),
+    path("photos/<int:pk>/", views.photo, name="photo"),
+    path("supplies/", views.supplies, name="supplies"),
+    path("supplies/<int:pk>/stock/", views.stock, name="stock"),
+    path("restocking/new/", views.commitment_edit, name="commitment_new"),
+    path("restocking/<int:pk>/", views.commitment_edit, name="commitment_edit"),
+    path("manage/email/", views.email_settings, name="email_settings"),
+    path("manage/supplies/", views.admin_supplies, name="admin_supplies"),
+    path("manage/bookings/", views.admin_bookings, name="admin_bookings"),
+    path("manage/bookings/<int:pk>/", views.admin_booking_detail, name="admin_booking_detail"),
+    path("manage/members/", views.members, name="members"),
+    path("manage/members/new/", views.member_edit, name="member_new"),
+    path("manage/members/<int:pk>/edit/", views.member_edit, name="member_edit"),
+    path("manage/members/<int:pk>/delete/", views.member_delete, name="member_delete"),
+    path("manage/bedrooms/", views.resources, name="resources"),
+    path("manage/bedrooms/new/", views.resource_edit, name="resource_new"),
+    path("manage/bedrooms/<int:pk>/", views.resource_edit, name="resource_edit"),
+    path("manage/blocks/new/", views.block_new, name="block_new"),
+    path("manage/blocks/<int:pk>/delete/", views.block_delete, name="block_delete"),
+    path("manage/supplies/new/", views.consumable_edit, name="consumable_new"),
+    path("manage/supplies/<int:pk>/", views.consumable_edit, name="consumable_edit"),
+]

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading split"><div><p class="eyebrow">ADMINISTRATION</p><h1>Manage supply items</h1><p>Add or configure the shared consumables list. Members update stock on the regular Supplies page.</p></div><a class="button" href="{% url 'consumable_new' %}">Add supply item</a></div>
+<section class="panel"><div class="table-scroll"><table><thead><tr><th>Item</th><th>Location</th><th>Enabled</th><th>Actions</th></tr></thead><tbody>
+{% for item in items %}<tr><td>{{ item.name }}</td><td>{{ item.location }}</td><td>{{ item.active|yesno:"Yes,No" }}</td><td><a href="{% url 'consumable_edit' item.pk %}">Configure</a></td></tr>{% empty %}<tr><td colspan="4">No supply items configured.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

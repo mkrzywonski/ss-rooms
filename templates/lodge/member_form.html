@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">USER ADMINISTRATION</p><h1>{% if member %}Edit {{ member.name }}{% else %}Add a user{% endif %}</h1><p class="subtitle">{% if member %}Leaving password fields blank keeps the current password. Your own access settings and protected superuser settings cannot be changed here.{% else %}Create a member account directly. Leave the password blank to send the member a link to choose their own password.{% endif %}</p><a href="{% url 'members' %}">← Back to members</a></div>
+<section class="panel form-panel"><form method="post">{% csrf_token %}{{ form.as_p }}<button>{% if member %}Save changes{% else %}Add user{% endif %}</button></form></section>
+{% endblock %}

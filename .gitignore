@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+media/
+staticfiles/
+*.sqlite3
+backups/
+*.log
+.ruff_cache/

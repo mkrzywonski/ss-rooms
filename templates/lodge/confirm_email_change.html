@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block content %}
+<section class="panel form-panel"><h1>Confirm email change</h1><p>Change your sign-in email from {{ user.email }} to <strong>{{ new_email }}</strong>?</p><form method="post">{% csrf_token %}<button>Confirm email change</button></form><p><a href="{% url 'my_profile' %}">Back to My profile</a></p></section>
+{% endblock %}
